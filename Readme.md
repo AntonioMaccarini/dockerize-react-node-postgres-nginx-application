@@ -49,7 +49,8 @@ This command will install all the required dependencies. The package manager dow
 
 ### Writing the back-end code
 
-Create an __index.js__ file and import the required packages:
+Create an __index.js__ file, it will be our main file. Add the following codes inside it.
+Start importing the required packages inside the file:
 
 ```js
 import pg from 'pg';
@@ -202,7 +203,8 @@ createTable();
 
 ## Build the front-end
 
-Let’s write the front-end logic to process the API endpoints defined above. Inside the __Project__ directory run the following code that will create a react project:
+Let’s write the front-end logic to process the API endpoints defined above. Inside the __Project__ directory run the following code.
+The code will create a new react folder automatically and also a new react project.
 
 
 ```bash
@@ -247,7 +249,6 @@ import Layout from "./components/Layout";
 import Home from "./components/Home";
 import PostUser from "./components/PostUser";
 import GetAllUser from "./components/GetAllUser";
-import NoPage from "./components/NoPage";
 
 export default function App() {
   return (
@@ -257,7 +258,6 @@ export default function App() {
         <Route index element={<Home />} />
         <Route path="post" element={<PostUser />} />
         <Route path="get" element={<GetAllUser />} />
-        <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
@@ -457,6 +457,22 @@ const PostUser = () => {
 After removing that line, you can run the command `npm run dev` to start the application. Once the application is running, you can access it at http://localhost:5173.
 
 ![Alt text](./pictures/home.png)
+
+Finally, we have to change a server option in Vite, to listen on all addresses, go to the vite.config.js and change the file to the following:
+
+```js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vitejs.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    host: true,
+    //port: 5173, When not running with docker compose, this is the port which will be used in docker
+  }
+})
+```
 
 ### Configuring the Nginx server
 
