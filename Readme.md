@@ -5,7 +5,7 @@ This tutorial explains how to Dockerize a React application with Node.js, Postgr
 ![Alt text](./pictures/1.drawio%20(1).png)
 
 ## Prerequisites
-Ensure that Docker and Node.js are installed on your computer.
+Ensure that Docker and Node.js are installed on your computer. The version I used for Node was 18.13.0 and for Docker was 20.10.24.
 
 ## Build the back-end
 
