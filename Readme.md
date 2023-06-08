@@ -43,7 +43,7 @@ To install these dependencies, navigate to the __node__ folder and run the follo
 npm install express pg nodemon 
 ```
 
-This command will install all the required dependencies. The package manager download the packages and its dependencies and store them in the __node_modules__ folder. This folder contains all the dependencies and their sub-dependencies that our project requires to run.
+This command will install all the required dependencies. The package manager downloads the packages and their dependencies and stores them in the __node_modules__ folder. This folder contains all the dependencies and their sub-dependencies that our project requires to run.
 
 ![Alt text](./pictures/afterInstallDependencies.png)
 
@@ -145,7 +145,7 @@ Finally, add a port that will expose the API when the server is running. Here, w
 app.listen(3000, () => console.log(`App running on port 3000.`));
 ```
 
-There are many other ways of doing and improving the code. We could handle errors better, improve the arquitecture with controllers, services, repositories and remove secrets values from the code. However, as we are not focusing on these aspects, this is going to be our back-end as simple as possible.
+There are many other ways of doing and improving the code. We could handle errors better, improve the architecture with controllers, services, repositories and remove secret values from the code. However, as we are not focusing on these aspects, this is going to be our back-end as simple as possible.
 
 ### Testing the routes
 
@@ -534,7 +534,7 @@ The __EXPOSE__ instruction specifies that the containerized application will lis
 
 ### Back-End dockerfile
 
-Create a file named __Dockerfile__ in the root folder of the back-end project and add the following code:
+Create a file named __Dockerfile__ in the __node__ folder of the project and add the following code:
 
 ```Dockerfile
 FROM node:alpine
