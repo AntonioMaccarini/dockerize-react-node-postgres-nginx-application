@@ -1,15 +1,15 @@
 # Dockerize a React application with Node.js, Postgres and Nginx
 
-This tutorial explains how to Dockerize a React application with Node.js, Postgres and Nginx. It provides step-by-step instructions on setting up the backend, frontend, and Nginx server, along with Dockerfiles and a docker-compose.yml file for containerization.
+This tutorial explains how to Dockerize a React application with Node.js, Postgres and Nginx. It provides step-by-step instructions on setting up the back-end, front-end, and Nginx server, along with Dockerfiles and a docker-compose.yml file for containerization.
 
 ![Alt text](./pictures/1.drawio%20(1).png)
 
 ## Prerequisites
 Ensure that Docker and Node.js are installed on your computer.
 
-## Build the backend
+## Build the back-end
 
-We will create a simple application that communicates with a database and exposes routes to the frontend.
+We will create a simple application that communicates with a database and exposes routes to the front-end.
 
 ### Starting the project
 
@@ -26,7 +26,7 @@ This command will generate a package.json file where we can add project
 
 ![Alt text](./pictures/pasteNode.png)
 
-### Backend dependencies:
+### Back-End dependencies:
 
 - __Express__: A Node.js web application framework used to handle client requests to specific endpoints. For more information, refer to the [Express Documentation](https://expressjs.com/en/guide/routing.html).
 
@@ -47,7 +47,7 @@ This command will install all the required dependencies. The package manager dow
 
 ![Alt text](./pictures/afterInstallDependencies.png)
 
-### Writing the backend code
+### Writing the back-end code
 
 Create an __index.js__ file and import the required packages:
 
@@ -145,7 +145,7 @@ Finally, add a port that will expose the API when the server is running. Here, w
 app.listen(3000, () => console.log(`App running on port 3000.`));
 ```
 
-There are many other ways of doing and improving the code. We could handle errors better, improve the arquitecture with controllers, services, repositories and remove secrets values from the code. However, as we are not focusing on these aspects, this is going to be our backend as simple as possible.
+There are many other ways of doing and improving the code. We could handle errors better, improve the arquitecture with controllers, services, repositories and remove secrets values from the code. However, as we are not focusing on these aspects, this is going to be our back-end as simple as possible.
 
 ### Testing the routes
 
@@ -200,9 +200,9 @@ createTable();
 ```
 
 
-## Build the frontend
+## Build the front-end
 
-Let’s write the frontend logic to process the API endpoints defined above. Inside the __Project__ directory run the following code that will create a react project:
+Let’s write the front-end logic to process the API endpoints defined above. Inside the __Project__ directory run the following code that will create a react project:
 
 
 ```bash
@@ -214,7 +214,7 @@ You will end up with the following structure:
 
 ![Alt text](./pictures/reactStructure.png)
 
-### Frontend dependencies:
+### Front-End dependencies:
 
 - __Axios__: A promise-based HTTP Client for node.js. For more information, refer to the [Axios Documentation](https://axios-http.com/docs/intro).
 
@@ -236,7 +236,7 @@ Accessing the browser at http://localhost:5173, you will get the following page:
 
 ![Alt text](./pictures/viteHome.png)
 
-### Writing the frontend code
+### Writing the front-end code
 
 First, let's replace the contents of the App.jsx file with the following code:
 
@@ -460,53 +460,53 @@ After removing that line, you can run the command `npm run dev` to start the app
 
 ### Configuring the Nginx server
 
-Nginx can be used as a reverse proxy server to handle requests from clients and forward them to the appropriate backend server.
+Nginx can be used as a reverse proxy server to handle requests from clients and forward them to the appropriate back-end server.
 
 To configure Nginx as a reverse proxy, navigate to the project's root directory and create an nginx folder. Inside this folder, create a file named default.conf and add the following configurations:
 
 ```
-upstream frontend {
-    server frontend:5173;
+upstream front-end {
+    server front-end:5173;
 }
 
-upstream backend {
-    server backend:3000;
+upstream back-end {
+    server back-end:3000;
 }
 
 server {
     listen 80;
 
     location / {
-        proxy_pass http://frontend;
+        proxy_pass http://front-end;
     }
 
     location /sockjs-node {
-        proxy_pass http://frontend;
+        proxy_pass http://front-end;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "Upgrade";
     }
 
     location /api {
-        rewrite /backend/(.*) /$1 break;
-        proxy_pass http://backend;
+        rewrite /back-end/(.*) /$1 break;
+        proxy_pass http://back-end;
     }
 }
 ```
 
-The __upstream__ directive defines groups of servers that can be referenced by the __proxy_pass__ directive. In this case, we have defined two upstreams: __frontend__ for the React frontend server and __backend__ for the Node.js backend server.
+The __upstream__ directive defines groups of servers that can be referenced by the __proxy_pass__ directive. In this case, we have defined two upstreams: __front-end__ for the React front-end server and __back-end__ for the Node.js back-end server.
 
 The __server__ block listens on port 80 and contains the configuration for handling requests.
 
-The __location__ __/__ block proxies requests to the frontend server using __proxy_pass http://frontend;__.
+The __location__ __/__ block proxies requests to the front-end server using __proxy_pass http://front-end;__.
 
-The __location /sockjs-node__ block handles WebSocket connections and passes them to the frontend server.
+The __location /sockjs-node__ block handles WebSocket connections and passes them to the front-end server.
 
-The __location /api__ block handles requests to the backend API by rewriting the URL and passing them to the backend server using __proxy_pass http://backend;__.
+The __location /api__ block handles requests to the back-end API by rewriting the URL and passing them to the back-end server using __proxy_pass http://back-end;__.
 
 ## Creating the Dockerfile
 
-### Frontend dockerfile
+### Front-End dockerfile
 
 In the __react__ folder, create a new file __Dockerfile__. Add the following code to the file:
 
@@ -532,9 +532,9 @@ The __RUN npm install__ command installs the required dependencies for the React
 
 The __EXPOSE__ instruction specifies that the containerized application will listen on port 5173 for incoming connections.
 
-### Backend dockerfile
+### Back-End dockerfile
 
-Create a file named __Dockerfile__ in the root folder of the backend project and add the following code:
+Create a file named __Dockerfile__ in the root folder of the back-end project and add the following code:
 
 ```Dockerfile
 FROM node:alpine
@@ -549,7 +549,7 @@ EXPOSE 3000
 
 ```
 
-This Dockerfile is similar to the frontend Dockerfile. It sets the working directory, copies the files, installs the dependencies, and exposes port 3000 for the backend application.
+This Dockerfile is similar to the front-end Dockerfile. It sets the working directory, copies the files, installs the dependencies, and exposes port 3000 for the back-end application.
 
 
 ### Nginx dockerfile
@@ -572,10 +572,10 @@ version: '3'
 
 services: 
 
-  backend:
+  back-end:
     build: 
       context: node
-    container_name: backend
+    container_name: back-end
     working_dir: /usr/src/app
     networks: 
       - node-network
@@ -589,10 +589,10 @@ services:
     depends_on:
        - db
 
-  frontend:
+  front-end:
     build: 
       context: react
-    container_name: frontend
+    container_name: front-end
     working_dir: /usr/src/app
     networks: 
       - node-network
@@ -629,8 +629,8 @@ services:
     networks: 
       - node-network
     depends_on:
-       - backend
-       - frontend
+       - back-end
+       - front-end
 
   
 networks: 
@@ -654,7 +654,7 @@ Once the containers are up and running, you can access the application by visiti
 
 If you choose the "Post User" option, you will be directed to http://localhost:8000/post. Here, you can create a new user, which will be recorded in our running Postgres database.
 
-In summary, the process involves the frontend sending a request to Nginx, which proxies the request to the backend. Since it has the /api route, Nginx acts as a proxy and forwards the request to the backend. The backend processes the request, saves data into the database, and generates a response. The response is then sent back to the frontend through Nginx.
+In summary, the process involves the front-end sending a request to Nginx, which proxies the request to the back-end. Since it has the /api route, Nginx acts as a proxy and forwards the request to the back-end. The back-end processes the request, saves data into the database, and generates a response. The response is then sent back to the front-end through Nginx.
 
 Let's create an example:
 
